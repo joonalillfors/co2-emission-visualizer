@@ -1,1 +1,1 @@
-# CO2-emission visualizer tool
+# CO2 emission visualizer tool
