@@ -34,23 +34,35 @@ const Result = ({app}) => {
         else {
             const country = app.state.cumulativeCountry
             let cumulativeCountries = app.state.cumulative
-            // TODO check that country doesnt exist in cumu
-            cumulativeCountries = cumulativeCountries.concat(country)
+            const countryNames = cumulativeCountries.map(x => x.Country)
+            if (!countryNames.includes(country[0].Country)) {
+                cumulativeCountries = cumulativeCountries.concat(country)
+            }
             const dataSet = {
-                labels: Array.from(cumulativeCountries.map(x => x.Country)),
+                labels: cumulativeCountries.map(x => x.Country),
                 datasets: [
                 {
-                    label: `Comparison of cumulative emissions ${app.state.capita ? "(t) per capita " : "(gt) "}from ${country[0].Min} to ${country[0].Max}`,
+                    label: `Comparison of cumulative emissions (gt) from ${country[0].Min} to ${country[0].Max}`,
                     fill: false,
                     backgroundColor: 'rgba(255,99,132,0.2)',
                     borderColor: 'rgba(255,99,132,1)',
                     borderWidth: 1,
                     hoverBackgroundColor: 'rgba(255,99,132,0.4)',
                     hoverBorderColor: 'rgba(255,99,132,1)',
-                    data: Array.from(app.state.capita ? cumulativeCountries.map(x => x.Capita) : cumulativeCountries.map(x => x.Emission))
+                    data: cumulativeCountries.map(x => x.Emission)
                 }
                 ]
             }
+            if (app.state.capita) dataSet.datasets.push({
+                label: `Comparison of cumulative emissions (t) per capita from ${country[0].Min} to ${country[0].Max}`,
+                fill: false,
+                backgroundColor: 'rgba(153,50,204,0.2)',
+                borderColor: 'rgba(153,50,204,1)',
+                borderWidth: 1,
+                hoverBackgroundColor: 'rgba(153,50,204,0.4)',
+                hoverBorderColor: 'rgba(153,50,204,1)',
+                data: cumulativeCountries.map(x => x.Capita)
+            })
             return dataSet
         }
     }
@@ -58,6 +70,10 @@ const Result = ({app}) => {
     let i = 0
 
     // Returns all visualizations, line and bar charts and the data table
+    // TODO Cumulative capitas for frontpage?
+    if (app.state.length === 0) {
+        return <div></div>
+    } else {
     return (
         <div className={dataDefined}>
           <Line className='line' data={lineTestData} width={5} height={2} options={{maintainAspectRatio: true}} />
@@ -84,6 +100,7 @@ const Result = ({app}) => {
           </table>
         </div>
     )
+    }
 }
 
 export default Result

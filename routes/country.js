@@ -1,7 +1,7 @@
 const router = require('express').Router()
 const db = require('../database/database')
 
-// Bad solution
+// Bad solution to filter out biggest areas
 function filterCountries(obj) {
     return obj.filter(c => !c.Country.includes('Asia') &&
                     !c.Country.includes('IDA') &&
@@ -30,6 +30,11 @@ router.get('/cumulative', async (req, res) => {
 
 router.get('/cumulative/:id', async (req, res) => {
     res.json(await db.getCumulativeCountry(req.params.id.toUpperCase()))
+})
+
+router.get('/cumulativecapita', async (req, res) => {
+    const result = await db.getCumulativePerCapita()
+    res.json(filterCountries(result))
 })
 
 router.get('/populations', async (req, res) => {
