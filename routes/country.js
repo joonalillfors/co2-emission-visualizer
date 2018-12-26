@@ -1,21 +1,10 @@
 const router = require('express').Router()
 const db = require('../database/database')
 
-// Bad solution to filter out biggest areas
+// Filter out biggest areas that aren't countries
 function filterCountries(obj) {
-    return obj.filter(c => !c.Country.includes('Asia') &&
-                    !c.Country.includes('IDA') &&
-                    !c.Country.includes('ividend') &&
-                    !c.Country.includes('Euro') &&
-                    !c.Country.includes('World') &&
-                    !c.Country.includes('IBRD') &&
-                    !c.Country.includes('income') &&
-                    !c.Country.includes('North') &&
-                    !c.Country.includes('OECD') &&
-                    !c.Country.includes('merica') &&
-                    !c.Country.includes('ahar') &&
-                    !c.Country.includes('countries') &&
-                    !c.Country.includes('conflict'))
+    const regex = new RegExp(`Asia|IDA|ividend|Euro|World|IBRD|income|North|OECD|merica|ahar|countries|conflict`)
+    return obj.filter(c => !regex.test(c.Country))
 }
 
 router.get('/biggest/:year', async (req, res) => {
