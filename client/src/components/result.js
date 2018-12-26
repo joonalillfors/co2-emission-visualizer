@@ -9,7 +9,7 @@ const Result = ({app}) => {
         if (app.state.data.length === 0) return []
         else {
             const dataSet = {
-                labels: app.state.data.filter(x => x.emissions !== null && x.year >= app.state.yearValue.min && x.year <= app.state.yearValue.max).map(x => x.year),
+                labels: app.state.data.filter(x => x.emissions !== null).map(x => x.year),
                 datasets: [
                 {
                     label: `Emissions ${app.state.capita ? "(t) per capita" : "(kt)"} of ${app.state.data[0].country}`,

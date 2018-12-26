@@ -20,7 +20,7 @@ app.use(bodyparser.json())
 app.use(bodyparser.urlencoded({extended: true}))
 
 app.use(express.static('./client/build'))
-app.use('/api', require('./routes/routes'))
+app.use('/api/v1', require('./routes/routes'))
 
 http.on('close', () => {
     console.log('Disconnecting from the database')

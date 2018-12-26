@@ -17,30 +17,26 @@ class App extends Component {
       data: [],
       world: [],
       cumulative: [],
-      cumulativeCountry: [],
-      yearValue: { min: 1960, max: 2017 },
-      yearSlide: { min: 1961, max: 2016 }
+      cumulativeCountry: []
     }
   }
 
   // Returns GET request as json
   async fetchJSON(url) {
-    let ret = await fetch(url)
+    let ret = await fetch('api/v1/'+url)
     return await ret.json()
   }
 
   // Fetches the countries that have available data and the range of years
   async componentDidMount() {
-    let result = await this.fetchJSON('/api/countries')
+    let result = await this.fetchJSON('countries')
     result = new Map(result)
-    let years = await this.fetchJSON('/api/years')
-    let world = await this.fetchJSON('/api/countries/wld')
-    let cumulative = await this.fetchJSON('api/countries/cumulative')
+    let years = await this.fetchJSON('years')
+    let world = await this.fetchJSON('countries/wld')
+    let cumulative = await this.fetchJSON('countries/cumulative')
     await this.setState({
       codeMap: result,
       countries: Array.from(result.keys()),
-      yearValue: { min: years[0].Year, max: years[years.length-1].Year},
-      yearSlide: { min: years[0].Year, max: years[years.length-1].Year},
       world,
       cumulative: cumulative.slice(0,10)
     })
@@ -54,8 +50,8 @@ class App extends Component {
     const {value, countries} = this.state
     if (countries.includes(value)) {
       const code = this.state.codeMap.get(value)
-      const response = await this.fetchJSON(`/api/countries/${code}`)
-      const cumulativeCountry = await this.fetchJSON(`/api/countries/cumulative/${code}`)
+      const response = await this.fetchJSON(`countries/${code}`)
+      const cumulativeCountry = await this.fetchJSON(`countries/cumulative/${code}`)
       this.setState({data: response, cumulativeCountry})
     } else
       console.log("Must search with valid country.")
