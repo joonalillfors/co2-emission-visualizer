@@ -1,10 +1,11 @@
 const sqlite = require('sqlite3').verbose()
+const updateDB = require('./updateDB')
 
 let db = null
 
 // Connects the server into SQLite database, read only mode
 async function connectDatabase() {
-    db = new sqlite.Database('database/emissions.db', sqlite.OPEN_READONLY, (err) => {
+    db = new sqlite.Database('database/emissions.db', sqlite.OPEN_READWRITE, (err) => {
         if (err) {
             console.error(err.message)
         }
@@ -15,6 +16,11 @@ async function connectDatabase() {
 // Disconnects the server from SQLite database
 function closeDatabase() {
     db.close()
+}
+
+// Updates database
+function updateDatabase() {
+    updateDB(db)
 }
 
 // Helper function to make queries from the database
@@ -128,6 +134,7 @@ async function getCumulativeCountry(id) {
 
 module.exports = {  connectDatabase,
                     closeDatabase,
+                    updateDatabase,
                     getPopulations,
                     getEmissions,
                     getPopulationByCountry,
